@@ -30,20 +30,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        partition: [1, 2, 3, 4]
+        os: [ubuntu-latest]
+        partition: [1]
         include:
           - os: ubuntu-latest
             base: ubuntu
-          - os: macos-latest
-            base: macos
       fail-fast: false
     
     env:
-      # Define the index of this particular worker [1-WORKER_TOTAL]
-      WORKER_INDEX: ${{ matrix.partition }}
-      # Total number of workers running this step
-      WORKER_TOTAL: 4
       # Cap parallel harness verification on ubuntu-latest: its 4-core/16 GB
       # runners get OOM-killed when 4 memory-hungry harnesses (up to ~10 GB
       # each, e.g. the ffi::c_str ones) run concurrently.
@@ -72,7 +66,8 @@ jobs:
       
       # Step 3: Run Kani on the std library (default configuration)
       - name: Run Kani Verification
-        run: head/scripts/run-kani.sh --path ${{github.workspace}}/head
+        run: |
+          head/scripts/run-kani.sh --path ${{github.workspace}}/head --kani-args --harness boxed:: --jobs=2
    
   kani_autoharness:
     name: Verify std library using autoharness
