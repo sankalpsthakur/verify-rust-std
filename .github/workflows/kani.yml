@@ -30,22 +30,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-24.04]
         partition: [1]
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             base: ubuntu
       fail-fast: false
     
     env:
-      # Cap parallel harness verification on ubuntu-latest: its 4-core/16 GB
+      # Cap parallel harness verification on ubuntu-24.04: its 4-core/16 GB
       # runners get OOM-killed when 4 memory-hungry harnesses (up to ~10 GB
       # each, e.g. the ffi::c_str ones) run concurrently.
-      KANI_JOBS: ${{ matrix.os == 'ubuntu-latest' && 2 || '' }}
+      KANI_JOBS: ${{ matrix.os == 'ubuntu-24.04' && 2 || '' }}
     
     steps:
       - name: Remove unnecessary software to free up disk space
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
         run: |
           # inspired by https://github.com/easimon/maximize-build-space/blob/master/action.yml
           df -h
@@ -61,7 +61,7 @@ jobs:
       
       # Step 2: Install jq
       - name: Install jq
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
         run: sudo apt-get install -y jq
       
       # Step 3: Run Kani on the std library (default configuration)
