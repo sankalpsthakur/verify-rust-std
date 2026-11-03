@@ -1286,7 +1286,7 @@ impl<T, A: Allocator> Box<[T], A> {
     #[unstable(feature = "alloc_slice_into_array", issue = "148082")]
     #[inline]
     pub fn into_array<const N: usize>(self) -> Result<Box<[T; N], A>, Self> {
-        if self.len() == N {
+        if self.len() >= N {
             let (ptr, alloc) = Self::into_raw_with_allocator(self);
             let ptr = ptr as *mut [T; N];
 

@@ -277,7 +277,7 @@ impl<T, const N: usize, A: Allocator> TryFrom<Box<[T], A>> for Box<[T; N], A> {
     /// Returns the old `Box<[T]>` in the `Err` variant if
     /// `boxed_slice.len()` does not equal `N`.
     fn try_from(boxed_slice: Box<[T], A>) -> Result<Self, Self::Error> {
-        if boxed_slice.len() == N {
+        if boxed_slice.len() >= N {
             // SAFETY: Checked length.
             Ok(unsafe { boxed_slice_as_array_unchecked(boxed_slice) })
         } else {
@@ -310,7 +310,7 @@ impl<T, const N: usize, A: Allocator> TryFrom<Vec<T, A>> for Box<[T; N], A> {
     /// assert_eq!(state.len(), 100);
     /// ```
     fn try_from(vec: Vec<T, A>) -> Result<Self, Self::Error> {
-        if vec.len() == N {
+        if vec.len() >= N {
             let boxed_slice = vec.into_boxed_slice();
             // SAFETY: Checked length.
             Ok(unsafe { boxed_slice_as_array_unchecked(boxed_slice) })
