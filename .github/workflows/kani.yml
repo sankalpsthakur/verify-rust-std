@@ -67,7 +67,7 @@ jobs:
       # Step 3: Run Kani on the std library (default configuration)
       - name: Run Kani Verification
         run: |
-          head/scripts/run-kani.sh --path ${{github.workspace}}/head --kani-args --harness boxed:: --jobs=2
+          head/scripts/run-kani.sh --path ${{github.workspace}}/head --kani-args --harness boxed:: --output-format=terse --jobs=2
    
   kani_autoharness:
     name: Verify std library using autoharness
